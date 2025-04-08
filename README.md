@@ -1,2 +1,1 @@
 # OpenFOAM_contents18
-技術書典18のOpenFOAMモデル
