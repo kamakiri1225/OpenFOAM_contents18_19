@@ -1,0 +1,92 @@
+mixedmeantemp
+{
+    type    coded;
+    libs    (utilityFunctionObjects);
+    name    mixedmeantemp;
+
+    codeExecute
+    #{
+        Info << "========= T_m(z) calculation ===========" << endl;
+    
+        const volVectorField& C = mesh().C();
+        const scalarField& V = mesh().V();
+    
+        const volVectorField& U = mesh().lookupObject<volVectorField>("U");
+        const volScalarField& T = mesh().lookupObject<volScalarField>("T");
+        const volScalarField& rho = mesh().lookupObject<volScalarField>("rho");
+    
+        // thermoライブラリから物性値を取得（型推論を使用）
+        // Cp を thermophysicalProperties 辞書から取得
+        IOdictionary thermoDict
+        (
+            IOobject
+            (
+                "thermophysicalProperties",
+                mesh().time().constant(),
+                mesh(),
+                IOobject::MUST_READ_IF_MODIFIED,
+                IOobject::NO_WRITE
+            )
+        );
+
+        const dictionary& mixture = thermoDict.subDict("mixture");
+        const dictionary& thermoSub = mixture.subDict("thermodynamics");
+        scalar Cp = readScalar(thermoSub.lookup("Cp"));
+
+        Info << "Cp from dictionary: " << Cp << endl;
+
+    
+        scalar radius = 0.02;    // 円管の半径 [m]
+        scalar zMin = 0.00;
+        scalar zMax = 1.8;
+        scalar dz = 0.001;
+    
+        // 出力ファイル設定
+        fileName outputDir = mesh().time().path()
+                             / fileName("postProcessing")
+                             / fileName("mixedmeantemp")
+                             / mesh().time().timeName();
+        mkDir(outputDir);
+    
+        OFstream outputFile(outputDir/"mixedmeantemp.dat");
+        outputFile << "# z [m]\tTm(z) [K]" << endl;
+    
+        for (scalar z = zMin; z <= zMax; z += dz)
+        {
+            scalar num_ = 0.0;
+            scalar den_ = 0.0;
+            label count = 0;
+    
+            forAll(C, i)
+            {
+                scalar x = C[i].x();
+                scalar y = C[i].y();
+                scalar zc = C[i].z();
+    
+                if (zc >= z && zc < z + dz)
+                {
+                    scalar r = sqrt(x*x + y*y);
+                    if (r <= radius)
+                    {
+                        scalar uz = U[i].z();
+                        scalar temp = T[i];
+                        scalar dens = rho[i];
+                        scalar vol = V[i];
+    
+                        num_ += dens * Cp * uz * temp * vol;
+                        den_ += dens * Cp * uz * vol;
+                        count++;
+                    }
+                }
+            }
+    
+            if (den_ > VSMALL)
+            {
+                scalar Tm = num_ / den_;
+                outputFile << z + dz/2 << "\t" << Tm << endl;
+            }
+        }
+    
+        Info << "Finished writing T_m(z) to: " << outputDir/"mixedmeantemp.dat" << endl;
+    #};
+}

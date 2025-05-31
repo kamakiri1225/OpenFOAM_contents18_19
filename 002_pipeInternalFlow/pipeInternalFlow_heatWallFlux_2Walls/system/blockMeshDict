@@ -1,0 +1,227 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   0.001;
+
+// Divisions in x/y/z directions.
+nx   8;
+ny   8;
+nz1   100;
+nz2   100;
+
+// radius
+r 10;
+
+pi   3.1415926;
+theta0     0.0;
+theta45   45.0;
+theta90   90.0;
+theta135 135.0;
+theta180 180.0;
+theta225 225.0;
+theta270 270.0;
+theta315 315.0;
+
+ratio 2.5;
+ratioMid 0.8;
+
+Xin1 #eval {$r/$ratio * cos($theta45 * $pi /180)};
+Yin1 #eval {$r/$ratio * sin($theta45 * $pi /180)};
+
+Xin2 #eval {$r/$ratio * cos($theta135 * $pi /180)};
+Yin2 #eval {$r/$ratio * sin($theta135 * $pi /180)};
+
+Xin3 #eval {$r/$ratio * cos($theta225 * $pi /180)};
+Yin3 #eval {$r/$ratio * sin($theta225 * $pi /180)};
+
+Xin4 #eval {$r/$ratio * cos($theta315 * $pi /180)};
+Yin4 #eval {$r/$ratio * sin($theta315 * $pi /180)};
+
+Xout1 #eval {$r * cos($theta45 * $pi /180)};
+Yout1 #eval {$r * sin($theta45 * $pi /180)};
+
+Xout2 #eval {$r * cos($theta135 * $pi /180)};
+Yout2 #eval {$r * sin($theta135 * $pi /180)};
+
+Xout3 #eval {$r * cos($theta225 * $pi /180)};
+Yout3 #eval {$r * sin($theta225 * $pi /180)};
+
+Xout4 #eval {$r * cos($theta315 * $pi /180)};
+Yout4 #eval {$r * sin($theta315 * $pi /180)};
+
+InYmin #eval {$r/$ratio*$ratioMid * sin($theta270 * $pi /180)};
+InXmax #eval {$r/$ratio*$ratioMid * cos($theta0 * $pi /180)};
+InYmax #eval {$r/$ratio*$ratioMid * sin($theta90 * $pi /180)};
+InXmin #eval {$r/$ratio*$ratioMid * cos($theta180 * $pi /180)};
+
+OutYmin #eval {$r * sin($theta270 * $pi /180)};
+OutXmax #eval {$r * cos($theta0 * $pi /180)};
+OutYmax #eval {$r * sin($theta90 * $pi /180)};
+OutXmin #eval {$r * cos($theta180 * $pi /180)};
+
+Zmin 0.0;
+Zrun 600;
+Zmax 1800;
+
+geometry
+{
+}
+
+vertices
+(
+  //circle radius in
+  ($Xin3  $Yin3  $Zmin) //0
+  ($Xin4  $Yin4  $Zmin) //1
+  ($Xin1  $Yin1  $Zmin) //2
+  ($Xin2  $Yin2  $Zmin) //3
+
+  //circle radius out
+  ($Xout3 $Yout3 $Zmin) //4
+  ($Xout4 $Yout4 $Zmin) //5
+  ($Xout1 $Yout1 $Zmin) //6
+  ($Xout2 $Yout2 $Zmin) //7
+
+  //circle radius in
+  ($Xin3  $Yin3  $Zrun) //8
+  ($Xin4  $Yin4  $Zrun) //9
+  ($Xin1  $Yin1  $Zrun) //10
+  ($Xin2  $Yin2  $Zrun) //11
+
+  //circle radius out
+  ($Xout3 $Yout3 $Zrun) //12
+  ($Xout4 $Yout4 $Zrun) //13
+  ($Xout1 $Yout1 $Zrun) //14
+  ($Xout2 $Yout2 $Zrun) //15
+
+  //circle radius in
+  ($Xin3  $Yin3  $Zmax) //16
+  ($Xin4  $Yin4  $Zmax) //17
+  ($Xin1  $Yin1  $Zmax) //18
+  ($Xin2  $Yin2  $Zmax) //19
+
+  //circle radius out
+  ($Xout3 $Yout3 $Zmax) //20
+  ($Xout4 $Yout4 $Zmax) //21
+  ($Xout1 $Yout1 $Zmax) //22
+  ($Xout2 $Yout2 $Zmax) //23
+
+);
+
+blocks
+(
+    hex (0 1 2 3 8 9 10 11) ($nx $ny $nz1) grading (1 1 1)
+    hex (1 0 4 5 9 8 12 13) ($nx $ny $nz1) grading (1 1 1)  
+    hex (2 1 5 6 10 9 13 14) ($nx $ny $nz1) grading (1 1 1) 
+    hex (3 2 6 7 11 10 14 15) ($nx $ny $nz1) grading (1 1 1)
+    hex (0 3 7 4 8 11 15 12) ($nx $ny $nz1) grading (1 1 1) 
+    hex (8 9 10 11 16 17 18 19) ($nx $ny $nz2) grading (1 1 1)
+    hex (9 8 12 13 17 16 20 21) ($nx $ny $nz2) grading (1 1 1)  
+    hex (10 9 13 14 18 17 21 22) ($nx $ny $nz2) grading (1 1 1) 
+    hex (11 10 14 15 19 18 22 23) ($nx $ny $nz2) grading (1 1 1)
+    hex (8 11 15 12 16 19 23 20) ($nx $ny $nz2) grading (1 1 1) 
+);
+
+edges
+(
+    //circle radius out 
+    arc 4 5 (0           $OutYmin  $Zmin)
+    arc 5 6 ($OutXmax    0         $Zmin)
+    arc 6 7 (0           $OutYmax  $Zmin)
+    arc 7 4 ($OutXmin    0         $Zmin)
+
+    arc 12 13 (0         $OutYmin  $Zrun)
+    arc 13 14 ($OutXmax  0         $Zrun)
+    arc 14 15 (0         $OutYmax  $Zrun)
+    arc 15 12 ($OutXmin  0         $Zrun)
+
+    arc 20 21 (0         $OutYmin  $Zmax)
+    arc 21 22 ($OutXmax  0         $Zmax)
+    arc 22 23 (0         $OutYmax  $Zmax)
+    arc 23 20 ($OutXmin  0         $Zmax)
+
+    //circle radius in
+    arc 0 1 (0           $InYmin   $Zmin)
+    arc 1 2 ($InXmax     0         $Zmin)
+    arc 2 3 (0           $InYmax   $Zmin)
+    arc 3 0 ($InXmin     0         $Zmin)
+
+    arc 8 9   (0         $InYmin   $Zrun)
+    arc 9 10  ($InXmax   0         $Zrun)
+    arc 10 11 (0         $InYmax   $Zrun)
+    arc 11 8  ($InXmin   0         $Zrun)
+
+    arc 16 17 (0         $InYmin   $Zmax)
+    arc 17 18 ($InXmax   0         $Zmax)
+    arc 18 19 (0         $InYmax   $Zmax)
+    arc 19 16 ($InXmin   0         $Zmax)
+);
+
+faces
+(
+
+);
+
+boundary
+(
+    runwalls
+    {
+        type wall;
+        faces
+        (
+            (5 13 14 6)
+            (6 14 15 7)
+            (7 15 12 4)
+            (4 12 13 5)
+        );
+    }
+    walls
+    {
+        type wall;
+        faces
+        (
+            (13 21 22 14)
+            (14 22 23 15)
+            (15 23 20 12)
+            (12 20 21 13)
+        );
+    }
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 1 2 3)
+            (0 4 5 1)
+            (1 5 6 2)
+            (2 6 7 3)
+            (7 4 0 3)
+        );
+    }
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (16 19 18 17)
+            (16 17 20 21)
+            (17 18 22 21)
+            (18 19 23 22)
+            (19 16 20 23)
+        );
+    }
+);
+
+// ************************************************************************* //
