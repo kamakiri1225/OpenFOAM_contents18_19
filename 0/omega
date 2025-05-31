@@ -1,0 +1,97 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+	version    2.0;
+	format    ascii;
+	class    volScalarField;
+	object    omega;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions    [ 0 0 -1 0 0 0 0 ];
+
+// epsilon=Cmu^0.75 k^1.5/ L
+// omega=k^0.25/Cmu^0.25/L=(9.1125E-5)^0.25/0.09^0.25/0.1722=1.035
+
+
+internalField    uniform 6.3; 
+boundaryField
+{
+    //https://www.openfoam.com/documentation/guides/latest/doc/guide-bcs-wall-turbulence-omegaWallFunction.html
+    ".*"
+    {
+		type    omegaWallFunction;
+		blending    binomial;
+		value    uniform 6.7082e-05;
+    }
+    XMin
+    {
+		type    omegaWallFunction;
+		blending    binomial;
+		value    uniform 6.7082e-05;
+
+    }
+    XMax
+    {
+		type    omegaWallFunction;
+		blending    binomial;
+		value    uniform 6.7082e-05;
+    }
+    YMin
+    {
+		type    omegaWallFunction;
+		blending    binomial;
+		value    uniform 6.7082e-05;
+    }
+    YMax
+    {
+		type    omegaWallFunction;
+		blending    binomial;
+		value    uniform 6.7082e-05;
+    }
+    ZMin_outlet1
+    {
+		type    inletOutlet;
+		inletValue    uniform 0.67082;
+		value    uniform 6.7082e-05;
+    }
+    ZMin_outlet2
+    {
+		type    inletOutlet;
+		inletValue    uniform 0.67082;
+		value    uniform 6.7082e-05;
+    }
+    ZMin_wall
+    {
+		type    omegaWallFunction;
+		blending    binomial;
+		value    uniform 6.7082e-05;
+    }
+    ZMin_wall1
+    {
+		type    omegaWallFunction;
+		blending    binomial;
+		value    uniform 6.7082e-05;
+    }
+    ZMin_wall2
+    {
+		type    omegaWallFunction;
+		blending    binomial;
+		value    uniform 6.7082e-05;
+    }
+    ZMax
+    {
+		type    turbulentMixingLengthFrequencyInlet;
+		mixingLength    0.1722; // L = 0.07*H
+		value    $internalField;
+    }
+}
+
+
+// ************************************************************************* //
