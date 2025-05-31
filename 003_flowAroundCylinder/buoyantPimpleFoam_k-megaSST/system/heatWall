@@ -1,0 +1,20 @@
+wallHeatFlux
+{
+    type    wallHeatFlux;
+    libs    (fieldFunctionObjects);
+    region    region0;
+    writeControl    outputTime;
+    patches    ();
+}
+
+heatTransferCoeff
+{
+    type    heatTransferCoeff;
+    libs    (fieldFunctionObjects);
+    region    region0;
+    writeControl    outputTime;
+    field    T;
+    patches    ( hole );
+    htcModel    fixedReferenceTemperature;
+    TRef    293.15;
+}

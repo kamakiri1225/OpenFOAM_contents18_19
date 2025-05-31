@@ -1,0 +1,72 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         Euler;
+}
+
+
+geometry
+{
+	type    highAspectRatio;
+	minAspect    10;
+	maxAspect    100;
+}
+
+gradSchemes
+{
+	default    Gauss linear;
+	grad(p_rgh)    cellLimited<Venkatakrishnan> Gauss linear 1;
+	grad(U)    cellLimited<Venkatakrishnan> Gauss linear 1;
+	grad(turb)    cellLimited<Venkatakrishnan> Gauss linear 1;
+	grad(h)    cellLimited<Venkatakrishnan> Gauss linear 1;
+	grad(K)    cellLimited<Venkatakrishnan> Gauss linear 1;
+	grad(Ii_h)    cellLimited<Venkatakrishnan> Gauss linear 1;
+}
+
+divSchemes
+{
+	default    Gauss linear;
+	div(phi,U)    Gauss linearUpwind grad(U);
+	div(phi,h)    Gauss upwind;
+	div(phi,K)    Gauss upwind;
+	div(phi,omega) Gauss upwind;
+	div(Ji,Ii_h)    Gauss linearUpwind grad(Ii_h);
+	div((nuEff*dev2(T(grad(U)))))    Gauss linear;
+}
+
+laplacianSchemes
+{
+	default    Gauss linear limited corrected 0.333;
+}
+
+interpolationSchemes
+{
+	default    linear;
+}
+
+snGradSchemes
+{
+	default    limited 0.333;
+}
+
+wallDist
+{
+	method    meshWave;
+}
+
+// ************************************************************************* //
