@@ -1,0 +1,331 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   0.001;
+
+// Divisions in x/y/z directions. Can be unequal.
+nx   5;
+ny   5;
+nz   300;
+
+// radius
+rhot  4;
+rsolid 5;
+rcold   8;
+
+pi   3.1415926;
+theta0     0.0;
+theta45   45.0;
+theta90   90.0;
+theta135 135.0;
+theta180 180.0;
+theta225 225.0;
+theta270 270.0;
+theta315 315.0;
+
+ratio 2.5;
+ratioMid 0.75;
+
+XhotIn1 #eval {$rhot/$ratio * cos($theta45 * $pi /180)};
+YhotIn1 #eval {$rhot/$ratio * sin($theta45 * $pi /180)};
+
+XhotIn2 #eval {$rhot/$ratio * cos($theta135 * $pi /180)};
+YhotIn2 #eval {$rhot/$ratio * sin($theta135 * $pi /180)};
+
+XhotIn3 #eval {$rhot/$ratio * cos($theta225 * $pi /180)};
+YhotIn3 #eval {$rhot/$ratio * sin($theta225 * $pi /180)};
+
+XhotIn4 #eval {$rhot/$ratio * cos($theta315 * $pi /180)};
+YhotIn4 #eval {$rhot/$ratio * sin($theta315 * $pi /180)};
+
+XhotOut1 #eval {$rhot * cos($theta45 * $pi /180)};
+YhotOut1 #eval {$rhot * sin($theta45 * $pi /180)};
+
+XhotOut2 #eval {$rhot * cos($theta135 * $pi /180)};
+YhotOut2 #eval {$rhot * sin($theta135 * $pi /180)};
+
+XhotOut3 #eval {$rhot * cos($theta225 * $pi /180)};
+YhotOut3 #eval {$rhot * sin($theta225 * $pi /180)};
+
+XhotOut4 #eval {$rhot * cos($theta315 * $pi /180)};
+YhotOut4 #eval {$rhot * sin($theta315 * $pi /180)};
+
+XsolidOut1 #eval {$rsolid * cos($theta45 * $pi /180)};
+YsolidOut1 #eval {$rsolid * sin($theta45 * $pi /180)};
+
+XsolidOut2 #eval {$rsolid * cos($theta135 * $pi /180)};
+YsolidOut2 #eval {$rsolid * sin($theta135 * $pi /180)};
+
+XsolidOut3 #eval {$rsolid * cos($theta225 * $pi /180)};
+YsolidOut3 #eval {$rsolid * sin($theta225 * $pi /180)};
+
+XsolidOut4 #eval {$rsolid * cos($theta315 * $pi /180)};
+YsolidOut4 #eval {$rsolid * sin($theta315 * $pi /180)};
+
+XcoldOut1 #eval {$rcold * cos($theta45 * $pi /180)};
+YcoldOut1 #eval {$rcold * sin($theta45 * $pi /180)};
+
+XcoldOut2 #eval {$rcold * cos($theta135 * $pi /180)};
+YcoldOut2 #eval {$rcold * sin($theta135 * $pi /180)};
+
+XcoldOut3 #eval {$rcold * cos($theta225 * $pi /180)};
+YcoldOut3 #eval {$rcold * sin($theta225 * $pi /180)};
+
+XcoldOut4 #eval {$rcold * cos($theta315 * $pi /180)};
+YcoldOut4 #eval {$rcold * sin($theta315 * $pi /180)};
+
+// arc positions
+hotInYmin #eval {$rhot/$ratio*$ratioMid * sin($theta270 * $pi /180)};
+hotInXmax #eval {$rhot/$ratio*$ratioMid * cos($theta0 * $pi /180)};
+hotInYmax #eval {$rhot/$ratio*$ratioMid * sin($theta90 * $pi /180)};
+hotInXmin #eval {$rhot/$ratio*$ratioMid * cos($theta180 * $pi /180)};
+
+hotOutYmin #eval {$rhot * sin($theta270 * $pi /180)};
+hotOutXmax #eval {$rhot * cos($theta0 * $pi /180)};
+hotOutYmax #eval {$rhot * sin($theta90 * $pi /180)};
+hotOutXmin #eval {$rhot * cos($theta180 * $pi /180)};
+
+solidOutYmin #eval {$rsolid * sin($theta270 * $pi /180)};
+solidOutXmax #eval {$rsolid * cos($theta0 * $pi /180)};
+solidOutYmax #eval {$rsolid * sin($theta90 * $pi /180)};
+solidOutXmin #eval {$rsolid * cos($theta180 * $pi /180)};
+
+coldOutYmin #eval {$rcold * sin($theta270 * $pi /180)};
+coldOutXmax #eval {$rcold * cos($theta0 * $pi /180)};
+coldOutYmax #eval {$rcold * sin($theta90 * $pi /180)};
+coldOutXmin #eval {$rcold * cos($theta180 * $pi /180)};
+
+Zmin 0.0;
+Zmax 1200;
+
+geometry
+{
+}
+
+vertices
+(
+  //circle radius in
+  ($XhotIn3 $YhotIn3 $Zmin) //0
+  ($XhotIn4 $YhotIn4 $Zmin) //1
+  ($XhotIn1 $YhotIn1 $Zmin) //2
+  ($XhotIn2 $YhotIn2 $Zmin) //3
+
+  //circle radius out
+  ($XhotOut3 $YhotOut3 $Zmin) //4
+  ($XhotOut4 $YhotOut4 $Zmin) //5
+  ($XhotOut1 $YhotOut1 $Zmin) //6
+  ($XhotOut2 $YhotOut2 $Zmin) //7
+
+  //circle radius out
+  ($XsolidOut3 $YsolidOut3 $Zmin) //8
+  ($XsolidOut4 $YsolidOut4 $Zmin) //9
+  ($XsolidOut1 $YsolidOut1 $Zmin) //10
+  ($XsolidOut2 $YsolidOut2 $Zmin) //11
+
+  //circle radius out
+  ($XcoldOut3  $YcoldOut3  $Zmin) //12
+  ($XcoldOut4  $YcoldOut4  $Zmin) //13
+  ($XcoldOut1  $YcoldOut1  $Zmin) //4
+  ($XcoldOut2  $YcoldOut2  $Zmin) //5
+
+  //circle radius in
+  ($XhotIn3 $YhotIn3 $Zmax) //16
+  ($XhotIn4 $YhotIn4 $Zmax) //17
+  ($XhotIn1 $YhotIn1 $Zmax) //18
+  ($XhotIn2 $YhotIn2 $Zmax) //19
+
+  //circle radius out
+  ($XhotOut3 $YhotOut3 $Zmax) //20
+  ($XhotOut4 $YhotOut4 $Zmax) //21
+  ($XhotOut1 $YhotOut1 $Zmax) //22
+  ($XhotOut2 $YhotOut2 $Zmax) //23
+
+  //circle radius out
+  ($XsolidOut3 $YsolidOut3 $Zmax) //24
+  ($XsolidOut4 $YsolidOut4 $Zmax) //25
+  ($XsolidOut1 $YsolidOut1 $Zmax) //26
+  ($XsolidOut2 $YsolidOut2 $Zmax) //27
+
+  //circle radius out
+  ($XcoldOut3 $YcoldOut3 $Zmax) //28
+  ($XcoldOut4 $YcoldOut4 $Zmax) //29
+  ($XcoldOut1 $YcoldOut1 $Zmax) //30
+  ($XcoldOut2 $YcoldOut2 $Zmax) //31
+
+);
+
+blocks
+(
+    hex (0 1 2 3 16 17 18 19) hotwater ($nx $ny $nz) grading (1 1 1)
+    hex (1 0 4 5 17 16 20 21) hotwater ($nx $ny $nz) grading (1 1 1)  
+    hex (2 1 5 6 18 17 21 22) hotwater ($nx $ny $nz) grading (1 1 1) 
+    hex (3 2 6 7 19 18 22 23) hotwater ($nx $ny $nz) grading (1 1 1)
+    hex (0 3 7 4 16 19 23 20) hotwater ($nx $ny $nz) grading (1 1 1) 
+
+    hex (5 4 8 9 21 20 24 25) solid ($nx $ny $nz) grading (1 1 1)  
+    hex (6 5 9 10 22 21 25 26) solid ($nx $ny $nz) grading (1 1 1) 
+    hex (7 6 10 11 23 22 26 27) solid ($nx $ny $nz) grading (1 1 1)
+    hex (4 7 11 8 20 23 27 24) solid ($nx $ny $nz) grading (1 1 1) 
+
+    hex (9 8 12 13 25 24 28 29) coldwater ($nx $ny $nz) grading (1 1 1)  
+    hex (10 9 13 14 26 25 29 30) coldwater ($nx $ny $nz) grading (1 1 1) 
+    hex (11 10 14 15 27 26 30 31) coldwater ($nx $ny $nz) grading (1 1 1)
+    hex (8 11 15 12 24 27 31 28) coldwater ($nx $ny $nz) grading (1 1 1) 
+);
+
+
+edges
+(
+    //circle radius in
+    arc 0 1 (0        $hotInYmin   $Zmin)
+    arc 1 2 ($hotInXmax  0         $Zmin)
+    arc 2 3 (0        $hotInYmax   $Zmin)
+    arc 3 0 ($hotInXmin  0         $Zmin)
+
+    //circle radius out 
+    arc 4 5 (0         $hotOutYmin $Zmin)
+    arc 5 6 ($hotOutXmax  0        $Zmin)
+    arc 6 7 (0         $hotOutYmax  $Zmin)
+    arc 7 4 ($hotOutXmin      0 $Zmin)
+
+    arc 8 9   (0       $solidOutYmin  $Zmin)
+    arc 9 10  ($solidOutXmax 0        $Zmin)
+    arc 10 11 (0       $solidOutYmax  $Zmin)
+    arc 11 8  ($solidOutXmin 0        $Zmin)
+
+    arc 12 13 (0         $coldOutYmin $Zmin)
+    arc 13 14 ($coldOutXmax  0        $Zmin)
+    arc 14 15 (0         $coldOutYmax  $Zmin)
+    arc 15 12 ($coldOutXmin      0 $Zmin)
+
+    //circle radius in
+    arc 16 17 (0        $hotInYmin   $Zmax)
+    arc 17 18 ($hotInXmax  0         $Zmax)
+    arc 18 19 (0        $hotInYmax   $Zmax)
+    arc 19 16 ($hotInXmin  0         $Zmax)
+
+    //circle radius out 
+    arc 20 21 (0         $hotOutYmin $Zmax)
+    arc 21 22 ($hotOutXmax  0        $Zmax)
+    arc 22 23 (0         $hotOutYmax  $Zmax)
+    arc 23 20 ($hotOutXmin      0 $Zmax)
+
+    arc 24 25   (0       $solidOutYmin  $Zmax)
+    arc 25 26  ($solidOutXmax 0        $Zmax)
+    arc 26 27 (0       $solidOutYmax  $Zmax)
+    arc 27 24  ($solidOutXmin 0        $Zmax)
+
+    arc 28 29 (0         $coldOutYmin $Zmax)
+    arc 29 30 ($coldOutXmax  0        $Zmax)
+    arc 30 31 (0         $coldOutYmax  $Zmax)
+    arc 31 28 ($coldOutXmin      0 $Zmax)
+);
+
+
+faces
+(
+
+);
+
+boundary
+(
+    hotwaterZMin
+    {
+        type patch;
+        faces
+        (
+            (0 3 2 1)
+            (1 2 6 5)
+            (2 3 7 6)
+            (3 0 4 7)
+            (0 1 4 5)
+        );
+    }
+    hotwaterZMax
+    {
+        type patch;
+        faces
+        (
+            (16 17 18 19)
+            (18 17 21 22)
+            (19 18 22 23)
+            (16 19 23 20)
+            (17 16 20 21)
+        );
+    }
+
+    solidZMin
+    {
+        type wall;
+        faces
+        (
+            (5 6 10 9)
+            (6 7 11 10)
+            (7 4 8 11)
+            (4 5 9 8)
+        );
+    }
+    solidZMax
+    {
+        type wall;
+        faces
+        (
+            (21 22 26 25)
+            (23 22 26 27)
+            (20 23 27 24)
+            (21 20 24 25)
+        );
+    }
+
+    coldwaterZMin
+    {
+        type patch;
+        faces
+        (
+            (9 10 14 13)
+            (10 11 15 14)
+            (11 8 15 12)
+            (8 9 13 12)
+        );
+    }
+
+    coldwaterZMax
+    {
+        type patch;
+        faces
+        (
+            (26 25 29 30)
+            (27 26 30 31)
+            (24 27 31 28)
+            (25 24 28 29)
+        );
+    }
+
+    coldwaterWalls
+    {
+        type wall;
+        faces
+        (
+            (14 13 29 30)
+            (30 14 15 31)
+            (12 15 31 28)
+            (12 13 29 28)
+        );
+    }
+);
+
+
+// ************************************************************************* //
