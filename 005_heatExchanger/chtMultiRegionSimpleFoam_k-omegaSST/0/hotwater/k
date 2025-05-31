@@ -1,0 +1,45 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volScalarField;
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 1.35e-13;
+
+boundaryField
+{
+	hotwater_to_solid // solid_to_hotwater
+	{
+		type    kqRWallFunction;
+		value    uniform 1.35e-13;
+	}
+
+	hotwaterZMax
+	{
+		type    inletOutlet;
+		inletValue    uniform 1.35e-05;
+		value    uniform 1.35e-13;
+	}
+
+	hotwaterZMin
+	{
+		type    turbulentIntensityKineticEnergyInlet;
+		intensity    0.03;
+		value    uniform 8.64e-08;
+	}
+}
+
+
+// ************************************************************************* //

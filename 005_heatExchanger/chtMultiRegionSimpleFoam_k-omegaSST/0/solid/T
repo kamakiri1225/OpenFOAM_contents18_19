@@ -1,0 +1,53 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 300;
+
+boundaryField
+{
+	solid_to_coldwater //coldwater_to_solid
+	{
+		type    compressible::turbulentTemperatureCoupledBaffleMixed;
+		Tnbr    T;
+		kappaMethod    solidThermo;
+		kappa    none;
+		value    uniform 300;
+	}
+
+	solid_to_hotwater //hotwater_to_solid
+	{
+		type    compressible::turbulentTemperatureCoupledBaffleMixed;
+		Tnbr    T;
+		kappaMethod    solidThermo;
+		kappa    none;
+		value    uniform 300;
+	}
+
+	solidZMax
+	{
+		type    zeroGradient;
+	}
+
+	solidZMin
+	{
+		type    zeroGradient;
+	}
+}
+
+
+// ************************************************************************* //
